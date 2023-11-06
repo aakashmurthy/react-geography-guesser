@@ -1,8 +1,22 @@
-import React from 'react';
+import { useState } from 'react';
 import logo from './logo.svg';
+import MapWrapper from './components/GoogleMaps/MapWrapper';
+import GoogleMap from './components/GoogleMaps/GoogleMap';
 import './App.css';
 
 function App() {
+  const guess: google.maps.LatLngLiteral | null = null;
+  const center = { lat: 44.56466353432313, lng: -123.28022377801592 }
+  const [showMap, setShowMap] = useState(false);
+  
+  const handleClick = () => {
+    setShowMap(true);
+  };
+
+  const handleMarkerSubmit = (coords: google.maps.LatLngLiteral) => {
+    console.log(`coords: ${coords.lat}, ${coords.lng}`)
+    // console.log(`Center: ${center.toJSON()}`)
+  }
   return (
     <div className="App">
       <header className="App-header">
@@ -19,6 +33,9 @@ function App() {
           Learn React
         </a>
       </header>
+      <button onClick={handleClick}>Show Map</button>
+      {showMap && <MapWrapper center={center}/>}
+      <GoogleMap onMarkerSubmit={handleMarkerSubmit}/>
     </div>
   );
 }
