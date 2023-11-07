@@ -1,25 +1,11 @@
 import './App.css';
-import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import HomePage from './pages/HomePage'
 import GamePage from './pages/GamePage'
+import ScorePage from './pages/ScorePage'
 
 function App() {
-  // eslint-disable-next-line 
-  const guess: google.maps.LatLngLiteral | null = null;
-  const center = { lat: 44.56466353432313, lng: -123.28022377801592 }
-  const [showMap, setShowMap] = useState(false);
-  
-  const handleClick = () => {
-    setShowMap(true);
-  };
-
-  const handleMarkerSubmit = (coords: google.maps.LatLngLiteral) => {
-    console.log(`coords: ${coords.lat}, ${coords.lng}`)
-    // console.log(`Center: ${center.toJSON()}`)
-  }
-
   return (
     <div className="App">
       <header className="header">
@@ -32,6 +18,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/game" element={<GamePage />} />
+            <Route path="/score" element={<ScorePage />} />
           </Routes>
         </div>
       </Router>

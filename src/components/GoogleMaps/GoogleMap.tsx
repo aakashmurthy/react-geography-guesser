@@ -16,10 +16,6 @@ export default function GoogleMap({ onMarkerSubmit }: GoogleMapProps) {
   const markerRef = useRef<google.maps.Marker | null>(null);
   const [markerPlaced, setMarkerPlaced] = useState(false);
   const [mapsLoaded, setMapsLoaded] = useState(false);
-  const center = {
-    lat: 0,
-    lng: 0
-  };
 
   useEffect(() => {
     const checkIfMapsLoaded = setInterval(() => {
@@ -34,8 +30,14 @@ export default function GoogleMap({ onMarkerSubmit }: GoogleMapProps) {
   useEffect(() => {
     if (mapRef.current) {
       const map = new window.google.maps.Map(mapRef.current, {
-        center,
+        center: {
+          lat: 0,
+          lng: 0
+        },
         zoom: 1,
+        clickableIcons: false,
+        streetViewControl: false,
+        mapTypeControl: false,
       });
 
       map.addListener('click', (e: google.maps.MapMouseEvent) => {

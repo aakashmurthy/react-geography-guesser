@@ -13,10 +13,11 @@ interface StreetViewProps {
 
 function StreetView({center}: StreetViewProps) {
     const ref = useRef<HTMLDivElement | null>(null);
+    const panoramaRef = useRef<google.maps.StreetViewPanorama | null>(null);
   
     useEffect(() => {
       if (ref.current) {
-        new window.google.maps.StreetViewPanorama(ref.current, {
+        panoramaRef.current = new window.google.maps.StreetViewPanorama(ref.current, {
           position: center,
           zoom: 0,
           addressControl: false,
@@ -24,8 +25,21 @@ function StreetView({center}: StreetViewProps) {
         });
       }
     });
+
+    const resetPosition = () => {
+      if (panoramaRef.current) {
+        panoramaRef.current.setPosition(center);
+      }
+    };
   
-    return <div ref={ref} id="street-viewer" />;
+    return (
+      <div >
+        <div ref={ref} id="street-viewer"/>
+        <div>
+          <button onClick={resetPosition}>Reset StreetView Position</button>
+        </div>
+      </div>
+    )
   }
 
 export default function MapWrapper({center}: StreetViewProps) {
