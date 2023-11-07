@@ -1,7 +1,13 @@
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef, ReactElement } from "react";
 import { Wrapper, Status } from "@googlemaps/react-wrapper";
 
-export default function MyMapComponent({
+const render = (status: Status): ReactElement => {
+  if (status === Status.LOADING) return <h3>{status} ..</h3>;
+  if (status === Status.FAILURE) return <h3>{status} ...</h3>;
+  return <></>;
+};
+
+function StreetView({
     center,
   }: {
     center: google.maps.LatLngLiteral;
@@ -23,5 +29,22 @@ export default function MyMapComponent({
       }
     }, [center]);
   
-    return <div ref={ref} id="map" />;
+    return <div ref={ref} id="street-viewer" />;
+  }
+
+export default function MapWrapper({
+  center,
+}: {
+  center: google.maps.LatLngLiteral;
+}) {
+    const apiKey = process.env.REACT_APP_GOOGLE_KEY;
+    if (!apiKey) {
+        throw new Error("Google Maps API key is not defined");
+    }
+
+    return (
+      <Wrapper apiKey={apiKey} render={render}>
+        <StreetView center={center} />
+      </Wrapper>
+    );
   }
