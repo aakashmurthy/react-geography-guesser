@@ -7,36 +7,28 @@ const render = (status: Status): ReactElement => {
   return <></>;
 };
 
-function StreetView({
-    center,
-  }: {
-    center: google.maps.LatLngLiteral;
-  }) {
+interface StreetViewProps {
+  center: google.maps.LatLngLiteral
+}
+
+function StreetView({center}: StreetViewProps) {
     const ref = useRef<HTMLDivElement | null>(null);
   
     useEffect(() => {
       if (ref.current) {
         new window.google.maps.StreetViewPanorama(ref.current, {
           position: center,
-          pov: {
-            heading: 34,
-            pitch: 10
-          },
-          zoom: 1,
+          zoom: 0,
           addressControl: false,
           showRoadLabels: false
         });
       }
-    }, [center]);
+    });
   
     return <div ref={ref} id="street-viewer" />;
   }
 
-export default function MapWrapper({
-  center,
-}: {
-  center: google.maps.LatLngLiteral;
-}) {
+export default function MapWrapper({center}: StreetViewProps) {
     const apiKey = process.env.REACT_APP_GOOGLE_KEY;
     if (!apiKey) {
         throw new Error("Google Maps API key is not defined");

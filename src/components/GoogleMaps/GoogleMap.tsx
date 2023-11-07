@@ -14,15 +14,25 @@ interface GoogleMapProps {
 export default function GoogleMap({ onMarkerSubmit }: GoogleMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const markerRef = useRef<google.maps.Marker | null>(null);
-  const [markerPlaced, setMarkerPlaced] = useState(false); // Use state instead of ref
+  const [markerPlaced, setMarkerPlaced] = useState(false);
+  const [mapsLoaded, setMapsLoaded] = useState(false);
   const center = {
     lat: 0,
     lng: 0
   };
 
+  useEffect(() => {
+    const checkIfMapsLoaded = setInterval(() => {
+      if (window.google) {
+        setMapsLoaded(true);
+        clearInterval(checkIfMapsLoaded);
+      }
+    }, 100);
+  });
+
   // Wait until rendered
   useEffect(() => {
-    if (mapRef.current && window.google) {
+    if (mapRef.current) {
       const map = new window.google.maps.Map(mapRef.current, {
         center,
         zoom: 1,
@@ -50,7 +60,7 @@ export default function GoogleMap({ onMarkerSubmit }: GoogleMapProps) {
         }
       });
     }
-  });
+  }, [mapsLoaded]);
 
   const apiKey = process.env.REACT_APP_GOOGLE_KEY || ""
   return (

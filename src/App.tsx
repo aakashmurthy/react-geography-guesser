@@ -4,9 +4,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import HomePage from './pages/HomePage'
 import GamePage from './pages/GamePage'
-import StreetView from './components/GoogleMaps/StreetView';
-import GoogleMap from './components/GoogleMaps/GoogleMap';
-import logo from './logo.svg';
 
 function App() {
   // eslint-disable-next-line 
