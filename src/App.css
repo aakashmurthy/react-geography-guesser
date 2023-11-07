@@ -37,6 +37,7 @@
   }
 }
 
-#map {
-  height: 100vh; /* or any other value */
+#map, #street-viewer {
+  width: 100%;
+  height: 400px;
 }

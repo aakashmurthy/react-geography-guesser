@@ -56,7 +56,7 @@ export default function GoogleMap({ onMarkerSubmit }: GoogleMapProps) {
   return (
     <>
       <Wrapper apiKey={apiKey} render={render}>
-          <div id="map" ref={mapRef} style={{ width: '100%', height: '400px' }} />
+          <div id="map" ref={mapRef} />
       </Wrapper>
       <button 
         disabled={!markerPlaced} 

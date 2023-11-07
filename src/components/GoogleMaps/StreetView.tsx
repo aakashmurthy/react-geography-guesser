@@ -22,7 +22,7 @@ function StreetView({
             heading: 34,
             pitch: 10
           },
-          zoom: 0,
+          zoom: 1,
           addressControl: false,
           showRoadLabels: false
         });

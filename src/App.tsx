@@ -1,8 +1,12 @@
-import { useState } from 'react';
-import logo from './logo.svg';
-import MapWrapper from './components/GoogleMaps/StreetView';
-import GoogleMap from './components/GoogleMaps/GoogleMap';
 import './App.css';
+import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navigation from './components/Navigation';
+import HomePage from './pages/HomePage'
+import GamePage from './pages/GamePage'
+import StreetView from './components/GoogleMaps/StreetView';
+import GoogleMap from './components/GoogleMaps/GoogleMap';
+import logo from './logo.svg';
 
 function App() {
   // eslint-disable-next-line 
@@ -21,27 +25,22 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+      <header className="header">
+        <h1>Geography Guesser</h1>
+        <p>5 guesses around the world, find out where you are</p>
       </header>
-      <button onClick={handleClick}>Show Map</button>
-      {showMap && (
-        <>
-          <MapWrapper center={center}/>
-          <GoogleMap onMarkerSubmit={handleMarkerSubmit}/>
-        </>
-      )}
+      <Router>
+        <Navigation />
+        <div className="App-header">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/game" element={<GamePage />} />
+          </Routes>
+        </div>
+      </Router>
+      <footer>
+        <p>© 2023 Aakash Murthy</p>
+      </footer>
     </div>
   );
 }
