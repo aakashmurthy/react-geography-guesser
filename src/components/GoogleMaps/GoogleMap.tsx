@@ -12,19 +12,21 @@ export default function GoogleMap({ onMarkerSubmit }: GoogleMapProps) {
   const [mapsLoaded, setMapsLoaded] = useState(false);
 
   useEffect(() => {
-    if (mapsLoaded && mapRef.current) {
-      const checkIfMapsLoaded = setInterval(() => {
-        if (window.google) {
-          setMapsLoaded(true);
-          clearInterval(checkIfMapsLoaded);
-        }
-      }, 100);
-    }
-  }, [mapsLoaded, mapRef]);
+    const checkIfMapsLoaded = setInterval(() => {
+      if (window.google) {
+        console.log('Google Maps API is loaded.'); // Log when the API is loaded
+        setMapsLoaded(true);
+        clearInterval(checkIfMapsLoaded);
+      }
+    }, 100);
+  
+    return () => clearInterval(checkIfMapsLoaded);
+  }, []);
 
   // Wait until rendered
   useEffect(() => {
-    if (mapRef.current) {
+    console.log('mapsLoaded:', mapsLoaded);
+    if (mapsLoaded && mapRef.current) {
       const map = new window.google.maps.Map(mapRef.current, {
         center: {
           lat: 0,

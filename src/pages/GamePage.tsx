@@ -2,9 +2,10 @@ import StreetView from '../components/GoogleMaps/StreetView'
 import GoogleMap from '../components/GoogleMaps/GoogleMap'
 import HelpBox from '../components/HelpBox'
 import DifficultyForm from '../components/DifficultyForm'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import axios from 'axios';
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 /* 
 Scoring Ideas:
@@ -34,20 +35,42 @@ function toRad(Value: number)
     return Value * Math.PI / 180;
 }
 
+type NearestRoads = {
+    lat: number,
+    lng: number,
+    latlng: string
+  }
+  
+async function getCoordinates(region: string): Promise<google.maps.LatLngLiteral> {
+    try {
+        const response = await axios.get(`http://localhost:8888/random-location?region=${region}`);
+        return { lat: response.data.lat, lng: response.data.lng };
+    } catch (error) {
+        console.error(error);
+        return { lat: 39.23611853557754, lng: -129.09572849422432 };
+    }
+}
+
 export default function HomePage() {
     // let center = { lat: 44.56466353432313, lng: -123.28022377801592 };
-    let center = { lat: 39.23611853557754, lng: -129.09572849422432}
+    const [center, setCenter] = useState<google.maps.LatLngLiteral>({ lat: 39.23611853557754, lng: -129.09572849422432});
     const [showMap, setShowMap] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // Check if the center state has been updated to a non-default value
+        if (center.lat !== 39.23611853557754 || center.lng !== -129.09572849422432) {
+          setShowMap(true);
+        }
+      }, [center]);
     
-    const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const form = event.currentTarget;
         const formElements = form.elements as HTMLFormControlsCollection & { gameOption?: HTMLInputElement }
-        const difficulty = (formElements.gameOption?.value);
-        // center = API(difficulty) // set center here to random coordinate from API
-        center = { lat: 39.23611853557754, lng: -129.09572849422432}
-        if (difficulty === "Impossible") {
+        const difficulty = (formElements.gameOption?.value!);
+        const newCenter = await getCoordinates(difficulty) // set center here to random coordinate from API
+        if (difficulty === "SA") {
             // Send notification if user selects impossible
             Swal.fire({
                 title: "Warning",
@@ -57,11 +80,11 @@ export default function HomePage() {
                 showCancelButton: true
             }).then((result) => {
                 if (result.isConfirmed) {
-                    setShowMap(true);
+                    setCenter(newCenter);
                 }
             });
         } else {
-            setShowMap(true);
+            setCenter(newCenter);
         }
     };
 
@@ -69,7 +92,7 @@ export default function HomePage() {
     const handleMarkerSubmit = (guess: google.maps.LatLngLiteral) => {
         console.log(`coords submitted: ${guess.lat}, ${guess.lng}`)
         const distance = calcDist(guess, center);
-        navigate('/score', { state: { distance: distance.toFixed(2) } }); 
+        navigate('/score', { state: { distance: distance.toFixed(2), center, guess } });
     }
 
     // Add form to own component and hide when submitted
@@ -79,7 +102,7 @@ export default function HomePage() {
             <h2>How does Geography Guesser work?</h2>
             <HelpBox />
             <DifficultyForm onSubmit={handleFormSubmit}/>
-            {/* if showMap is set, show the map */}
+            {/* if showMap is set, show the maps */}
             {showMap && (
                 <>
                 <StreetView center={center}/>

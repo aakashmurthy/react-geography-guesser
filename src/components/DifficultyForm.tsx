@@ -18,7 +18,7 @@ export default function DifficultyForm({onSubmit}: FormProps) {
                         type="radio"
                         name="gameOption"
                         id="easy"
-                        value="Easy"
+                        value="US"
                         onChange={handleRadioChange}
                         defaultChecked
                     />
@@ -29,7 +29,7 @@ export default function DifficultyForm({onSubmit}: FormProps) {
                         type="radio"
                         name="gameOption"
                         id="medium"
-                        value="Medium"
+                        value="EU"
                         onChange={handleRadioChange}
                     />
                     Medium
@@ -39,7 +39,7 @@ export default function DifficultyForm({onSubmit}: FormProps) {
                         type="radio"
                         name="gameOption"
                         id="hard"
-                        value="Hard"
+                        value="AS"
                         onChange={handleRadioChange}
                     />
                     Hard
@@ -49,7 +49,7 @@ export default function DifficultyForm({onSubmit}: FormProps) {
                         type="radio"
                         name="gameOption"
                         id="impossible"
-                        value="Impossible"
+                        value="SA"
                         onChange={handleRadioChange}
                     />
                     Impossible (Proceed with caution!)
