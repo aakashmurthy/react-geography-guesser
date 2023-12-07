@@ -18,13 +18,15 @@ export default function GoogleMap({ onMarkerSubmit }: GoogleMapProps) {
   const [mapsLoaded, setMapsLoaded] = useState(false);
 
   useEffect(() => {
-    const checkIfMapsLoaded = setInterval(() => {
-      if (window.google) {
-        setMapsLoaded(true);
-        clearInterval(checkIfMapsLoaded);
-      }
-    }, 100);
-  });
+    if (mapsLoaded && mapRef.current) {
+      const checkIfMapsLoaded = setInterval(() => {
+        if (window.google) {
+          setMapsLoaded(true);
+          clearInterval(checkIfMapsLoaded);
+        }
+      }, 100);
+    }
+  }, [mapsLoaded, mapRef]);
 
   // Wait until rendered
   useEffect(() => {

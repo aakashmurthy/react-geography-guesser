@@ -1,10 +1,10 @@
 import StreetView from '../components/GoogleMaps/StreetView'
 import GoogleMap from '../components/GoogleMaps/GoogleMap'
 import HelpBox from '../components/HelpBox'
+import DifficultyForm from '../components/DifficultyForm'
 import { useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom';
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 /* 
 Scoring Ideas:
@@ -15,16 +15,16 @@ Scoring Ideas:
 // calculates distance between points in miles
 function calcDist(point1: google.maps.LatLngLiteral, point2: google.maps.LatLngLiteral) 
     {
-      var R = 3963.19; // mi
-      var dLat = toRad(point2.lat-point1.lat);
-      var dLon = toRad(point2.lng-point1.lng);
-      var lat1 = toRad(point1.lat);
-      var lat2 = toRad(point2.lat);
+      let R = 3963.19; // mi
+      let dLat = toRad(point2.lat-point1.lat);
+      let dLon = toRad(point2.lng-point1.lng);
+      let lat1 = toRad(point1.lat);
+      let lat2 = toRad(point2.lat);
 
-      var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+      let a = Math.sin(dLat/2) * Math.sin(dLat/2) +
         Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
-      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-      var d = R * c;
+      let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+      let d = R * c;
       return d;
     }
 
@@ -35,21 +35,21 @@ function toRad(Value: number)
 }
 
 export default function HomePage() {
-    // const location = useLocation();
-    // const difficulty = location.state.difficulty ? location.state.difficulty : "";
-    const center = { lat: 44.56466353432313, lng: -123.28022377801592 };
+    // let center = { lat: 44.56466353432313, lng: -123.28022377801592 };
+    let center = { lat: 39.23611853557754, lng: -129.09572849422432}
     const [showMap, setShowMap] = useState(false);
-    const [radioValue, setRadioValue] = useState('');
     const navigate = useNavigate();
-    const MySwal = withReactContent(Swal);
-
-    const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setRadioValue(e.target.value);
-    };
-    const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        if (radioValue === "Impossible") {
-            MySwal.fire({
+    
+    const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        const formElements = form.elements as HTMLFormControlsCollection & { gameOption?: HTMLInputElement }
+        const difficulty = (formElements.gameOption?.value);
+        // center = API(difficulty) // set center here to random coordinate from API
+        center = { lat: 39.23611853557754, lng: -129.09572849422432}
+        if (difficulty === "Impossible") {
+            // Send notification if user selects impossible
+            Swal.fire({
                 title: "Warning",
                 text: 'Do you want to continue? This is the ultimate challenge',
                 icon: 'error',
@@ -78,47 +78,8 @@ export default function HomePage() {
             <h1>Start Game</h1>
             <h2>How does Geography Guesser work?</h2>
             <HelpBox />
-            
-            <form onSubmit={handleFormSubmit}>
-                <label>
-                    <input
-                        type="radio"
-                        name="gameOption"
-                        value="Easy"
-                        onChange={handleRadioChange}
-                        defaultChecked
-                    />
-                    Easy
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        name="gameOption"
-                        value="Medium"
-                        onChange={handleRadioChange}
-                    />
-                    Medium
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        name="gameOption"
-                        value="Hard"
-                        onChange={handleRadioChange}
-                    />
-                    Hard
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        name="gameOption"
-                        value="Impossible"
-                        onChange={handleRadioChange}
-                    />
-                    Impossible (Proceed with caution!)
-                </label>
-                <input type="submit" value="Start Game!"></input>
-            </form>
+            <DifficultyForm onSubmit={handleFormSubmit}/>
+            {/* if showMap is set, show the map */}
             {showMap && (
                 <>
                 <StreetView center={center}/>

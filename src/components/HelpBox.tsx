@@ -6,7 +6,7 @@ export default function HelpBox() {
     <Tabs>
     <TabList>
       <Tab>Background</Tab>
-      <Tab>StreetView</Tab>
+      <Tab>Street View</Tab>
       <Tab>Guessing</Tab>
       <Tab>Scoring</Tab>
       <Tab>Need Help?</Tab>
@@ -17,7 +17,7 @@ export default function HelpBox() {
       <p>Geography Guesser is a simple game, where you are placed somewhere in the world, at random, with a goal to pinpoint your starting location on the provided map.</p>
     </TabPanel>
     <TabPanel>
-      <p>To navigate, simply use the provided arrows on the StreetView window, or click on the road to move your viewer to that point.</p>
+      <p>To navigate, simply use the provided arrows on the Street View window, or click on the road to move your viewer to that point.</p>
     </TabPanel>
     <TabPanel>
       <p>Make your guess on the map below the viewer, and submit using the button.</p>
