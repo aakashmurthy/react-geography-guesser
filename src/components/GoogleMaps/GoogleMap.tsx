@@ -1,11 +1,5 @@
-import React, { useEffect, useRef, ReactElement, useState } from 'react';
-import { Wrapper, Status } from '@googlemaps/react-wrapper';
-
-const render = (status: Status): ReactElement => {
-  if (status === Status.LOADING) return <h3>{status} ..</h3>;
-  if (status === Status.FAILURE) return <h3>{status} ...</h3>;
-  return <></>;
-};
+import { useEffect, useRef, useState } from 'react';
+import MapWrapper from './MapWrapper';
 
 interface GoogleMapProps {
   onMarkerSubmit: (coords: google.maps.LatLngLiteral) => void;
@@ -66,12 +60,11 @@ export default function GoogleMap({ onMarkerSubmit }: GoogleMapProps) {
     }
   }, [mapsLoaded]);
 
-  const apiKey = process.env.REACT_APP_GOOGLE_KEY || ""
   return (
     <>
-      <Wrapper apiKey={apiKey} render={render}>
+      <MapWrapper>
           <div id="map" ref={mapRef} />
-      </Wrapper>
+      </MapWrapper>
       <button 
         disabled={!markerPlaced} 
         onClick={() => {

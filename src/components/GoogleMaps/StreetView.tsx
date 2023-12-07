@@ -1,16 +1,12 @@
-import React, { useEffect, useRef, ReactElement, useState } from "react";
-import { Wrapper, Status } from "@googlemaps/react-wrapper";
+import { useEffect, useRef, useState } from "react";
+import MapWrapper from './MapWrapper';
+
+
 declare global {
   interface Window {
     initMap: () => void;
   }
 }
-
-const render = (status: Status): ReactElement => {
-  if (status === Status.LOADING) return <h3>{status} ..</h3>;
-  if (status === Status.FAILURE) return <h3>{status} ...</h3>;
-  return <></>;
-};
 
 interface StreetViewProps {
   center: google.maps.LatLngLiteral
@@ -50,70 +46,57 @@ function findClosestRoad({ center }: StreetViewProps): Promise<NearestRoads> {
     });
 }
 
-function StreetView({center}: StreetViewProps) {
-    const ref = useRef<HTMLDivElement | null>(null);
-    const panoramaRef = useRef<google.maps.StreetViewPanorama | null>(null);
-    const [isScriptLoaded, setIsScriptLoaded] = useState(false);
-  
-    useEffect(() => {
-      const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_KEY}&callback=initMap`;
-      script.async = true;
-      script.defer = true;
-      window.initMap = () => setIsScriptLoaded(true);
-      document.head.appendChild(script);
-  
-      return () => {
-        window.initMap = () => {};
-        document.head.removeChild(script);
-      };
-    }, []);
+export default function StreetView({center}: StreetViewProps) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const panoramaRef = useRef<google.maps.StreetViewPanorama | null>(null);
+  const [isScriptLoaded, setIsScriptLoaded] = useState(false);
 
-    useEffect(() => {
-        findClosestRoad({ center })
-          .then(nearestRoads => {
-            if (nearestRoads.snappedPoints.length > 0 && ref.current) {
-              const roundedPoint = nearestRoads.snappedPoints[0].location;
-              console.log(roundedPoint);
-              const roundedLatLng = new google.maps.LatLng(roundedPoint.latitude, roundedPoint.longitude);
-              panoramaRef.current = new google.maps.StreetViewPanorama(ref.current, {
-                position: roundedLatLng,
-                zoom: 0,
-                addressControl: false,
-                showRoadLabels: false
-              });
-            }
-          })
-          .catch(error => {
-            console.error('Failed to find the closest road:', error);
-          });
-    }, [center, isScriptLoaded]);
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_KEY}&callback=initMap`;
+    script.async = true;
+    script.defer = true;
+    window.initMap = () => setIsScriptLoaded(true);
+    document.head.appendChild(script);
 
-    const resetPosition = () => {
-      if (panoramaRef.current) {
-        panoramaRef.current.setPosition(center);
-      }
+    return () => {
+      window.initMap = () => {};
+      document.head.removeChild(script);
     };
-  
-    return (
-      <div >
-        <div ref={ref} id="street-viewer"/>
-        <div>
-          <button onClick={resetPosition}>Reset StreetView Position</button>
-        </div>
-      </div>
-    )
-  }
+  }, []);
 
-export default function MapWrapper({center}: StreetViewProps) {
-    const apiKey = process.env.REACT_APP_GOOGLE_KEY;
-    if (!apiKey) {
-        throw new Error("Google Maps API key is not defined");
+  useEffect(() => {
+      findClosestRoad({ center })
+        .then(nearestRoads => {
+          if (nearestRoads.snappedPoints.length > 0 && ref.current) {
+            const roundedPoint = nearestRoads.snappedPoints[0].location;
+            console.log(roundedPoint);
+            const roundedLatLng = new google.maps.LatLng(roundedPoint.latitude, roundedPoint.longitude);
+            panoramaRef.current = new google.maps.StreetViewPanorama(ref.current, {
+              position: roundedLatLng,
+              zoom: 0,
+              addressControl: false,
+              showRoadLabels: false
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Failed to find the closest road:', error);
+        });
+  }, [center, isScriptLoaded]);
+
+  const resetPosition = () => {
+    if (panoramaRef.current) {
+      panoramaRef.current.setPosition(center);
     }
+  };
 
-    return (
-      <Wrapper apiKey={apiKey} render={render}>
-        <StreetView center={center} />
-      </Wrapper>
-    );
-  }
+  return (
+    <MapWrapper>
+      <div ref={ref} id="street-viewer"/>
+      <div>
+        <button onClick={resetPosition}>Reset StreetView Position</button>
+      </div>
+      </MapWrapper>
+  )
+}
