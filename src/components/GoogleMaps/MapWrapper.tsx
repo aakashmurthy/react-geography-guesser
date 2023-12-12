@@ -8,16 +8,20 @@ const render = (status: Status): ReactElement => {
     return <></>;
 };
 
+const keyDoesntExist = (): Boolean => {
+    return (!process.env.REACT_APP_GOOGLE_KEY! || process.env.REACT_APP_GOOGLE_KEY === 'keyhere');
+};
+
 export default function MapWrapper({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    if (!process.env.REACT_APP_GOOGLE_KEY || process.env.REACT_APP_GOOGLE_KEY === 'keyhere') {
+    if (keyDoesntExist()) {
         return <div>No Google Maps API key loaded</div>
     }
 
-    return <Wrapper apiKey={process.env.REACT_APP_GOOGLE_KEY} render={render}>
+    return <Wrapper apiKey={process.env.REACT_APP_GOOGLE_KEY!} render={render}>
         {children}
     </Wrapper>
 }

@@ -10,7 +10,7 @@ function App() {
     <div className="App">
       <header className="header">
         <h1>Geography Guesser</h1>
-        <p>5 guesses around the world, find out where you are</p>
+        <p>You get transported to a random point in the world. Find out where you are!</p>
       </header>
       <Router>
         <Navigation />

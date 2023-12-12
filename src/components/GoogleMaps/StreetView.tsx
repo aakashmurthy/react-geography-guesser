@@ -5,8 +5,12 @@ interface StreetViewProps {
   center: google.maps.LatLngLiteral;
 }
 
-export default function StreetView({ center }: StreetViewProps) {
+export default function StreetView({
+  center
+}:
+StreetViewProps) {
   const ref = useRef<HTMLDivElement | null>(null);
+  const streetViewPanoramaRef = useRef<google.maps.StreetViewPanorama | null>(null);
   const [apiLoaded, setApiLoaded] = useState(false);
 
   // Check if the Google Maps API is loaded
@@ -20,12 +24,12 @@ export default function StreetView({ center }: StreetViewProps) {
     }, 100);
 
     return () => clearInterval(checkIfMapsLoaded);
-  }, []);
+  });
 
   // Initialize StreetView once the API is loaded
   useEffect(() => {
-    if (apiLoaded && ref.current) {
-      new window.google.maps.StreetViewPanorama(ref.current, {
+    if (apiLoaded && ref.current && !streetViewPanoramaRef.current) {
+      streetViewPanoramaRef.current = new window.google.maps.StreetViewPanorama(ref.current, {
         position: center,
         zoom: 0,
         addressControl: false,
@@ -34,11 +38,16 @@ export default function StreetView({ center }: StreetViewProps) {
     }
   }, [apiLoaded, center]);
 
+  const resetPosition = () => {
+    streetViewPanoramaRef.current?.setPosition(center);
+  };
+
   return (
-    <>
-      <MapWrapper>
-        <div ref={ref} id="street-viewer"/>
+    <MapWrapper>
+      <div ref={ref} id="street-viewer"/>
+      <div>
+        <button onClick={resetPosition}>Reset StreetView Position</button>
+      </div>
       </MapWrapper>
-    </>
-  );
+  )
 }

@@ -17,42 +17,42 @@ export default function DifficultyForm({onSubmit}: FormProps) {
                     <input
                         type="radio"
                         name="gameOption"
-                        id="easy"
+                        id="US"
                         value="US"
                         onChange={handleRadioChange}
                         defaultChecked
                     />
-                    Easy
+                    United States
                 </label>
                 <label>
                     <input
                         type="radio"
                         name="gameOption"
-                        id="medium"
+                        id="EU"
                         value="EU"
                         onChange={handleRadioChange}
                     />
-                    Medium
+                    Europe
                 </label>
                 <label>
                     <input
                         type="radio"
                         name="gameOption"
-                        id="hard"
+                        id="Asia"
                         value="AS"
                         onChange={handleRadioChange}
                     />
-                    Hard
+                    Asia
                 </label>
                 <label>
                     <input
                         type="radio"
                         name="gameOption"
-                        id="impossible"
+                        id="South America"
                         value="SA"
                         onChange={handleRadioChange}
                     />
-                    Impossible (Proceed with caution!)
+                    South America (Hard)
                 </label>
                 <button type="submit">Start Game!</button>
             </form>
