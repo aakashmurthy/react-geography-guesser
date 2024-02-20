@@ -13,12 +13,12 @@ StreetViewProps) {
   const streetViewPanoramaRef = useRef<google.maps.StreetViewPanorama | null>(null);
   const [apiLoaded, setApiLoaded] = useState(false);
 
-  // Check if the Google Maps API is loaded
+  // When any component is updated, load map if google window is set
   useEffect(() => {
     const checkIfMapsLoaded = setInterval(() => {
       if (window.google) {
         console.log('Google Maps API is loaded for StreetView.');
-        setApiLoaded(true);
+        setMapsLoaded(true);
         clearInterval(checkIfMapsLoaded);
       }
     }, 100);
