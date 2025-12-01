@@ -40,7 +40,7 @@ const getCoordinates = async (region: string): Promise<google.maps.LatLngLiteral
 };
 
 // Main component
-export default function HomePage() {
+export default function GamePage() {
   const [center, setCenter] = useState<google.maps.LatLngLiteral>(DEFAULT_CENTER);
   const [showMap, setShowMap] = useState(false);
   const navigate = useNavigate();

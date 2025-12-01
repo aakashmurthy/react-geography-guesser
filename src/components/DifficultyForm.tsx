@@ -1,16 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 interface FormProps {
     onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 }
 
 export default function DifficultyForm({onSubmit}: FormProps) {
-    const [radioValue, setRadioValue] = useState('');
-
-    const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setRadioValue(e.target.value);
-    };
-
     return (
         <form id="difficultyform" onSubmit={onSubmit}>
                 <label>
@@ -19,7 +13,6 @@ export default function DifficultyForm({onSubmit}: FormProps) {
                         name="gameOption"
                         id="US"
                         value="US"
-                        onChange={handleRadioChange}
                         defaultChecked
                     />
                     United States
@@ -30,7 +23,6 @@ export default function DifficultyForm({onSubmit}: FormProps) {
                         name="gameOption"
                         id="EU"
                         value="EU"
-                        onChange={handleRadioChange}
                     />
                     Europe
                 </label>
@@ -40,7 +32,6 @@ export default function DifficultyForm({onSubmit}: FormProps) {
                         name="gameOption"
                         id="Asia"
                         value="AS"
-                        onChange={handleRadioChange}
                     />
                     Asia
                 </label>
@@ -50,7 +41,6 @@ export default function DifficultyForm({onSubmit}: FormProps) {
                         name="gameOption"
                         id="South America"
                         value="SA"
-                        onChange={handleRadioChange}
                     />
                     South America (Hard)
                 </label>

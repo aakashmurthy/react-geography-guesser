@@ -18,7 +18,7 @@ StreetViewProps) {
     const checkIfMapsLoaded = setInterval(() => {
       if (window.google) {
         console.log('Google Maps API is loaded for StreetView.');
-        setMapsLoaded(true);
+        setApiLoaded(true);
         clearInterval(checkIfMapsLoaded);
       }
     }, 100);

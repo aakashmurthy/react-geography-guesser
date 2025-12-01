@@ -33,6 +33,14 @@
       "react-app/jest"
     ]
   },
+  "jest": {
+    "transformIgnorePatterns": [
+      "node_modules/(?!(axios)/)"
+    ],
+    "moduleNameMapper": {
+      "\\.(css|less|scss|sass)$": "identity-obj-proxy"
+    }
+  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -48,6 +56,7 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@types/google.maps": "^3.54.6",
-    "@types/node": "^20.10.3"
+    "@types/node": "^20.10.3",
+    "identity-obj-proxy": "^3.0.0"
   }
 }
